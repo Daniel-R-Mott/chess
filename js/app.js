@@ -109,7 +109,7 @@ document.addEventListener("mousemove", function (e) {
   });
 
 
-// No longer using this, adds piece to
+// No longer using this, adds piece unicode to cell div instead of creating child piece div
     // var piece = pieces[chessboardLocation];
     // if (piece) {
     //   cell.textContent = piece;
