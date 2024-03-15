@@ -1,0 +1,61 @@
+html {
+  background-color:rgb(87, 87, 87);
+}
+
+#chessborder {
+  background-color: rgb(24, 0, 161);
+  background-image: url(../img/bluemarble.png);
+  background-repeat: repeat;
+  margin: none;
+  padding: 40px;
+  width:860px;
+}
+
+#chessboard {
+  display:inline-grid;
+  grid-template-columns: repeat(8, 0fr);
+  grid-template-rows: repeat(8);
+  border-image: url(../img/brownwood.jpg) 1000 / 50px / 50px;
+  background-repeat: repeat;
+  margin: auto;
+  padding: 10px;
+}
+
+
+.cell {
+  font-size: 5em;
+  text-align: center;
+  height: 100px;
+  width: 100px;
+  border: 2px solid rgb(168, 204, 224);
+  border-style:inset;
+}
+
+.white {
+  background-color: rgb(252, 241, 223);
+  background-image: url(../img/whitecell.png);
+}
+
+.black {
+  background-color: black;
+  background-image: url(../img/blacktile.jpg);
+}
+
+.selected {
+  border: 3px red solid inset;
+  color: darkred;
+  text-shadow: 2px 2px 3px darkred;
+
+  
+}
+
+div {
+  cursor: pointer;
+  text-shadow: 1px 1px 3px black;
+}
+
+/* Make piece stick to mouse */
+.held {
+  position: absolute;
+  z-index:1;
+}
