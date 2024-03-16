@@ -35,6 +35,13 @@ var pieces = {
   H8: "♜",
 };
 
+//TODO:
+// -when piece is held, highlight cells at valid move locations, only accept valid moves
+// -piece capture - check if target cell is occupied, remove piece
+// -pawn promotion
+// -check for check and checkmate states
+// -castling
+
 // Create 8x8 div chess board
 for (var i = 0; i < 8; i++) {
   for (var j = 0; j < 8; j++) {
