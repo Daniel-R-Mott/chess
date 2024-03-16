@@ -54,66 +54,67 @@ for (var i = 0; i < 8; i++) {
     // Set cell id based on location
     cell.id = chessboardLocation;
 
+    // Needs work, currently creating child piece div in every cell
     // If location is piece starting location, create new piece div inside cell div
-    var pieceDiv = document.createElement('div');
-    pieceDiv.className = 'piece';
-    pieceDiv.textContent = pieces[chessboardLocation] || '';
-    cell.appendChild(pieceDiv);
-    cell.classList.add('occupied');
+    var pieceDiv = document.createElement("div");
+    pieceDiv.className = "piece";
+    pieceDiv.textContent = pieces[chessboardLocation] || "";
+    if (pieceDiv.innerText !== "") {
+      cell.classList.add("occupied");
+    }
+    if (cell.classList.contains("occupied")) {
+      cell.appendChild(pieceDiv);
+    }
     chessboard.appendChild(cell);
   }
 }
+
 var heldPiece = null;
 
 function select() {
   cells.forEach((cell) => {
     cell.classList.remove("selected");
-    cell.removeAttribute("id", "held");
   });
   this.classList.add("selected");
   if (this.classList.contains("occupied")) {
-    heldPiece = this.querySelector('.piece');
-    this.setAttribute("id", "held");
+    heldPiece = this.querySelector(".piece");
+    heldPiece.setAttribute("id", "held");
   } else {
     heldPiece = null;
   }
 }
+
 const cells = document.querySelectorAll(".cell");
 cells.forEach((cell) => {
   cell.addEventListener("click", select);
 });
 
-// Sticks held piece to cursor
+// 2-click movement is working here, but not click and drag. Piece also does not stick to cursor visually
 // Add event listener to the document to handle piece movement
 document.addEventListener("mousemove", function (e) {
-    if (heldPiece) {
-      // Move the held piece along with the mouse cursor
-      heldPiece.style.top = e.pageY + "px";
-      heldPiece.style.left = e.pageX + "px";
+  if (heldPiece) {
+    // Move the held piece along with the mouse cursor
+    heldPiece.style.top = e.pageY + "px";
+    heldPiece.style.left = e.pageX + "px";
+  }
+});
+
+// Add event listener to the document to handle piece drop
+document.addEventListener("mouseup", function (e) {
+  if (heldPiece) {
+    // Find the cell where the piece is dropped
+    const targetCell = document.elementFromPoint(e.clientX, e.clientY);
+    if (targetCell.classList.contains("cell")) {
+      // If the target cell is a valid cell, move the piece to that cell
+      targetCell.appendChild(heldPiece);
+      // Set cell class to occupied, removes class from previous cell
+      targetCell.classList.add("occupied");
+      let selected = document.querySelector(".selected");
+      selected.classList.remove("occupied");
+      heldPiece.style.top = "";
+      heldPiece.style.left = "";
     }
-  });
-  
-  // Add event listener to the document to handle piece drop
-  document.addEventListener("mouseup", function (e) {
-    if (heldPiece) {
-      // Find the cell where the piece is dropped
-      const targetCell = document.elementFromPoint(e.clientX, e.clientY);
-      if (targetCell.classList.contains('cell')) {
-        // If the target cell is a valid cell, move the piece to that cell
-        targetCell.appendChild(heldPiece);
-        heldPiece.style.top = "";
-        heldPiece.style.left = "";
-      }
-      heldPiece = null; // Reset held piece
-    }
-  });
-
-
-// No longer using this, adds piece unicode to cell div instead of creating child piece div
-    // var piece = pieces[chessboardLocation];
-    // if (piece) {
-    //   cell.textContent = piece;
-    //   cell.classList.add("occupied");
-    // }
-
-
+    heldPiece.removeAttribute("id", "held");
+    heldPiece = null;
+  }
+});
