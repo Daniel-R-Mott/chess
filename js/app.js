@@ -42,7 +42,7 @@ var pieces = {
 // -pawn promotion
 // -check for check and checkmate states
 // -castling
-// -update 'pieces' array with new locations? may be useful
+// -update 'pieces' obj with new locations? may be useful
 
 makeBoard();
 checkCells();
@@ -72,10 +72,14 @@ function select() {
 //Drops piece on target cell and updates classes
 function placePiece() {
   if (heldPiece) {
-    if (this.classList.contains("cell")) {
+    if (
+      this.classList.contains("cell") &&
+      !this.classList.contains("occupied")
+    ) {
       this.appendChild(heldPiece);
       document.querySelector(".selected").classList.remove("selected");
       checkCells();
+    } else {
     }
     heldPiece.style = "center";
     heldPiece.removeAttribute("id", "held");
@@ -114,15 +118,19 @@ function makeBoard() {
       }
       var chessboardLocation = file[j] + (8 - i);
       cell.id = chessboardLocation;
-      if (Object.keys(pieces).indexOf(cell.id) > -1) {
-        // CELL H1 NOT GETTING OCCUPPIED CLASS, fixes on first mouseup
+      if (pieces[chessboardLocation]) {
         var pieceDiv = document.createElement("div");
         pieceDiv.className = "piece";
-        pieceDiv.textContent = pieces[chessboardLocation] || "";
+        pieceDiv.textContent = pieces[chessboardLocation];
+        if (/[78]$/.test(chessboardLocation)) {
+          pieceDiv.classList.add("blackPiece");
+        } else {
+          pieceDiv.classList.add("whitePiece");
+        }
         cell.appendChild(pieceDiv);
-
       }
       chessboard.appendChild(cell);
     }
   }
 }
+
