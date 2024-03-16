@@ -45,6 +45,7 @@ var pieces = {
 // -update 'pieces' array with new locations? may be useful
 
 makeBoard();
+checkCells();
 
 var heldPiece = null;
 document.addEventListener("mousemove", stickyMouse);
@@ -119,7 +120,7 @@ function makeBoard() {
         pieceDiv.className = "piece";
         pieceDiv.textContent = pieces[chessboardLocation] || "";
         cell.appendChild(pieceDiv);
-        checkCells();
+
       }
       chessboard.appendChild(cell);
     }
