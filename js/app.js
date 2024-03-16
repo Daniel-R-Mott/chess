@@ -1,5 +1,6 @@
 const chessboard = document.getElementById("chessboard");
-const letters = ["A", "B", "C", "D", "E", "F", "G", "H"];
+const file = ["A", "B", "C", "D", "E", "F", "G", "H"];
+const rank = ["1", "2", "3", "4", "5", "6", "7", "8"];
 var pieces = {
   A1: "♖",
   B1: "♘",
@@ -41,84 +42,86 @@ var pieces = {
 // -pawn promotion
 // -check for check and checkmate states
 // -castling
+// -update 'pieces' array with new locations? may be useful
 
-// Create 8x8 div chess board
-for (var i = 0; i < 8; i++) {
-  for (var j = 0; j < 8; j++) {
-    var cell = document.createElement("div");
-    cell.className = "cell";
-
-    // Adds classes for black/white cells
-    if ((i + j) % 2 == 0) {
-      cell.classList.add("black");
-    } else {
-      cell.classList.add("white");
-    }
-
-    // Get algebraic notation of cell
-    var chessboardLocation = letters[j] + (8 - i);
-
-    // Set cell id based to algebraic notation
-    cell.id = chessboardLocation;
-
-    // If location is piece starting location, create new piece div inside cell div
-    var pieceDiv = document.createElement("div");
-    pieceDiv.className = "piece";
-    pieceDiv.textContent = pieces[chessboardLocation] || "";
-    if (pieceDiv.innerText !== "") {
-      cell.classList.add("occupied");
-    }
-    if (cell.classList.contains("occupied")) {
-      cell.appendChild(pieceDiv);
-    }
-    chessboard.appendChild(cell);
-  }
-}
+makeBoard();
 
 var heldPiece = null;
+document.addEventListener("mousemove", stickyMouse);
 
-// on mousedown adds "selected" class to target cell, if cell is occupied, sets id of child piece div to "held"
+const cells = document.querySelectorAll(".cell");
+cells.forEach((cell) => {
+  cell.addEventListener("mousedown", select);
+  cell.addEventListener("mouseup", placePiece);
+});
+
+//////////////FUNCTION JUNCTION
+
 function select() {
   this.classList.add("selected");
   if (this.classList.contains("occupied")) {
     heldPiece = this.querySelector(".piece");
     heldPiece.setAttribute("id", "held");
+    this.classList.remove("occupied");
   } else {
     heldPiece = null;
   }
 }
-// listener for mousedown on cells
-const cells = document.querySelectorAll(".cell");
-cells.forEach((cell) => {
-  cell.addEventListener("mousedown", select);
-});
 
-// Add event listener to the document to handle piece drop
-document.addEventListener("mouseup", function (e) {
+//Drops piece on target cell and updates classes
+function placePiece() {
   if (heldPiece) {
-    const targetCell = document.elementFromPoint(e.clientX, e.clientY);
-    // checks if target cell is valid cell, then removes "occupied" class from previous cell
-    if (targetCell.classList.contains("cell")) {
-      const previouslySelectedCell = document.querySelector(".selected");
-      if (previouslySelectedCell) {
-        previouslySelectedCell.classList.remove("occupied");
-      }
-      // appends piece div to cell div, removes selected class on previous cell and adds occupied class to target cell
-      targetCell.appendChild(heldPiece);
-      previouslySelectedCell.classList.remove("selected");
-      targetCell.classList.add("occupied");
+    if (this.classList.contains("cell")) {
+      this.appendChild(heldPiece);
+      document.querySelector(".selected").classList.remove("selected");
+      checkCells();
     }
     heldPiece.style = "center";
     heldPiece.removeAttribute("id", "held");
     heldPiece = null;
   }
-});
+}
 
-// Attaches piece to cursor on mousemove
-document.addEventListener("mousemove", function (e) {
+//Attaches piece to cursor
+function stickyMouse(e) {
   if (heldPiece) {
     heldPiece.style.position = "fixed";
     heldPiece.style.left = e.clientX - heldPiece.offsetWidth / 2 + "px";
     heldPiece.style.top = e.clientY - heldPiece.offsetHeight / 2 + "px";
   }
-});
+}
+
+//Checks all cells for child div, sets class
+function checkCells() {
+  const cells = document.querySelectorAll(".cell");
+  cells.forEach((cell) => {
+    if (cell.firstChild) {
+      cell.classList.add("occupied");
+    }
+  });
+}
+
+function makeBoard() {
+  for (var i = 0; i < 8; i++) {
+    for (var j = 0; j < 8; j++) {
+      var cell = document.createElement("div");
+      cell.className = "cell";
+      if ((i + j) % 2 == 0) {
+        cell.classList.add("black");
+      } else {
+        cell.classList.add("white");
+      }
+      var chessboardLocation = file[j] + (8 - i);
+      cell.id = chessboardLocation;
+      if (Object.keys(pieces).indexOf(cell.id) > -1) {
+        // CELL H1 NOT GETTING OCCUPPIED CLASS, fixes on first mouseup
+        var pieceDiv = document.createElement("div");
+        pieceDiv.className = "piece";
+        pieceDiv.textContent = pieces[chessboardLocation] || "";
+        cell.appendChild(pieceDiv);
+        checkCells();
+      }
+      chessboard.appendChild(cell);
+    }
+  }
+}

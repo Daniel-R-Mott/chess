@@ -60,14 +60,9 @@ div {
   text-shadow: 1px 1px 3px black;
 }
 
-.piece {
-  text-align: center;
- 
-}
 
 /* Make piece stick to mouse */
 #held {
-  position: fixed;
   pointer-events:none;
-  /* cursor: none; */
+  cursor:none;
 }
