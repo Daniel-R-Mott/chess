@@ -35,7 +35,7 @@ html {
   width: 100px;
   border: 2px solid rgb(168, 204, 224);
   border-style: inset;
-
+text-align: center;
 }
 
 .white {
@@ -62,7 +62,7 @@ div {
 
 .piece {
   text-align: center;
-  justify-content: center;
+ 
 }
 
 /* Make piece stick to mouse */

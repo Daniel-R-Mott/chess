@@ -70,7 +70,7 @@ for (var i = 0; i < 8; i++) {
 
 var heldPiece = null;
 
-// on mousedown adds "selected" class to target cell, if cell is occupied, sets id of piece div to "held"
+// on mousedown adds "selected" class to target cell, if cell is occupied, sets id of child piece div to "held"
 function select() {
   this.classList.add("selected");
   if (this.classList.contains("occupied")) {
@@ -101,7 +101,7 @@ document.addEventListener("mouseup", function (e) {
       previouslySelectedCell.classList.remove("selected");
       targetCell.classList.add("occupied");
     }
-
+    heldPiece.style = "center";
     heldPiece.removeAttribute("id", "held");
     heldPiece = null;
   }
