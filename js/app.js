@@ -1,4 +1,7 @@
 const chessboard = document.getElementById("chessboard");
+window.addEventListener("dragstart", function (e) {
+  e.preventDefault();
+});
 const letters = ["A", "B", "C", "D", "E", "F", "G", "H"];
 var pieces = {
   A1: "♖",
@@ -54,7 +57,6 @@ for (var i = 0; i < 8; i++) {
     // Set cell id based on location
     cell.id = chessboardLocation;
 
-    // Needs work, currently creating child piece div in every cell
     // If location is piece starting location, create new piece div inside cell div
     var pieceDiv = document.createElement("div");
     pieceDiv.className = "piece";
@@ -86,35 +88,33 @@ function select() {
 
 const cells = document.querySelectorAll(".cell");
 cells.forEach((cell) => {
-  cell.addEventListener("click", select);
-});
-
-// 2-click movement is working here, but not click and drag. Piece also does not stick to cursor visually
-// Add event listener to the document to handle piece movement
-document.addEventListener("mousemove", function (e) {
-  if (heldPiece) {
-    // Move the held piece along with the mouse cursor
-    heldPiece.style.top = e.pageY + "px";
-    heldPiece.style.left = e.pageX + "px";
-  }
+  cell.addEventListener("mousedown", select);
 });
 
 // Add event listener to the document to handle piece drop
 document.addEventListener("mouseup", function (e) {
-  if (heldPiece) {
-    // Find the cell where the piece is dropped
-    const targetCell = document.elementFromPoint(e.clientX, e.clientY);
-    if (targetCell.classList.contains("cell")) {
-      // If the target cell is a valid cell, move the piece to that cell
-      targetCell.appendChild(heldPiece);
-      // Set cell class to occupied, removes class from previous cell
-      targetCell.classList.add("occupied");
-      let selected = document.querySelector(".selected");
-      selected.classList.remove("occupied");
-      heldPiece.style.top = "";
-      heldPiece.style.left = "";
+    if (heldPiece) {
+      // Find the target cell where the piece is dropped
+      const targetCell = document.elementFromPoint(e.clientX, e.clientY);
+      if (targetCell.classList.contains("cell")) {
+        // If the target cell is a valid cell, move the piece to that cell
+        targetCell.appendChild(heldPiece);
+        // Set cell class to occupied, removes class from previous cell
+        targetCell.classList.add("occupied");
+        document.querySelector("selected").classList.remove("occupied");
+        heldPiece.style.top = "";
+        heldPiece.style.left = "";
+      }
+      heldPiece.removeAttribute("id", "held");
+      heldPiece = null;
     }
-    heldPiece.removeAttribute("id", "held");
-    heldPiece = null;
+  });
+
+// Attaches piece to cursor on mousemove
+document.addEventListener("mousemove", function (e) {
+  if (heldPiece) {
+    heldPiece.style.position = 'fixed';
+    heldPiece.style.left = e.clientX - heldPiece.offsetWidth / 2 + "px";
+    heldPiece.style.top = e.clientY - heldPiece.offsetHeight / 2 + "px";
   }
 });

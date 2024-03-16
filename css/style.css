@@ -1,5 +1,12 @@
 html {
-  background-color:rgb(87, 87, 87);
+  background-color: rgb(87, 87, 87);
+  /* disable mouse highlighting */
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 
 #chessborder {
@@ -8,11 +15,11 @@ html {
   background-repeat: repeat;
   margin: none;
   padding: 40px;
-  width:860px;
+  width: 860px;
 }
 
 #chessboard {
-  display:inline-grid;
+  display: inline-grid;
   grid-template-columns: repeat(8, 0fr);
   grid-template-rows: repeat(8);
   border-image: url(../img/brownwood.jpg) 1000 / 50px / 50px;
@@ -21,14 +28,13 @@ html {
   padding: 10px;
 }
 
-
 .cell {
   font-size: 5em;
   text-align: center;
   height: 100px;
   width: 100px;
   border: 2px solid rgb(168, 204, 224);
-  border-style:inset;
+  border-style: inset;
 }
 
 .white {
@@ -45,8 +51,6 @@ html {
   border: 3px red solid inset;
   color: darkred;
   text-shadow: 2px 2px 3px darkred;
-
-  
 }
 
 div {
@@ -56,7 +60,10 @@ div {
 
 /* Make piece stick to mouse */
 .held {
-position: absolute;
-left:0;
-top:0;
+  /* position: absolute;
+  top: 0;
+  left: 0; */
+  position: fixed;
+  /* transition: transform 0.23s;
+  pointer-events: none;  */
 }
