@@ -35,6 +35,7 @@ html {
   width: 100px;
   border: 2px solid rgb(168, 204, 224);
   border-style: inset;
+
 }
 
 .white {
@@ -53,17 +54,20 @@ html {
   text-shadow: 2px 2px 3px darkred;
 }
 
+
 div {
   cursor: pointer;
   text-shadow: 1px 1px 3px black;
 }
 
+.piece {
+  text-align: center;
+  justify-content: center;
+}
+
 /* Make piece stick to mouse */
-.held {
-  /* position: absolute;
-  top: 0;
-  left: 0; */
+#held {
   position: fixed;
-  /* transition: transform 0.23s;
-  pointer-events: none;  */
+  pointer-events:none;
+  /* cursor: none; */
 }

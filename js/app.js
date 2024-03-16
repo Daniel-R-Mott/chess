@@ -1,7 +1,4 @@
 const chessboard = document.getElementById("chessboard");
-window.addEventListener("dragstart", function (e) {
-  e.preventDefault();
-});
 const letters = ["A", "B", "C", "D", "E", "F", "G", "H"];
 var pieces = {
   A1: "♖",
@@ -51,10 +48,10 @@ for (var i = 0; i < 8; i++) {
       cell.classList.add("white");
     }
 
-    // Calculate location
+    // Get algebraic notation of cell
     var chessboardLocation = letters[j] + (8 - i);
 
-    // Set cell id based on location
+    // Set cell id based to algebraic notation
     cell.id = chessboardLocation;
 
     // If location is piece starting location, create new piece div inside cell div
@@ -73,10 +70,8 @@ for (var i = 0; i < 8; i++) {
 
 var heldPiece = null;
 
+// on mousedown adds "selected" class to target cell, if cell is occupied, sets id of piece div to "held"
 function select() {
-  cells.forEach((cell) => {
-    cell.classList.remove("selected");
-  });
   this.classList.add("selected");
   if (this.classList.contains("occupied")) {
     heldPiece = this.querySelector(".piece");
@@ -85,7 +80,7 @@ function select() {
     heldPiece = null;
   }
 }
-
+// listener for mousedown on cells
 const cells = document.querySelectorAll(".cell");
 cells.forEach((cell) => {
   cell.addEventListener("mousedown", select);
@@ -93,27 +88,29 @@ cells.forEach((cell) => {
 
 // Add event listener to the document to handle piece drop
 document.addEventListener("mouseup", function (e) {
-    if (heldPiece) {
-      // Find the target cell where the piece is dropped
-      const targetCell = document.elementFromPoint(e.clientX, e.clientY);
-      if (targetCell.classList.contains("cell")) {
-        // If the target cell is a valid cell, move the piece to that cell
-        targetCell.appendChild(heldPiece);
-        // Set cell class to occupied, removes class from previous cell
-        targetCell.classList.add("occupied");
-        document.querySelector("selected").classList.remove("occupied");
-        heldPiece.style.top = "";
-        heldPiece.style.left = "";
+  if (heldPiece) {
+    const targetCell = document.elementFromPoint(e.clientX, e.clientY);
+    // checks if target cell is valid cell, then removes "occupied" class from previous cell
+    if (targetCell.classList.contains("cell")) {
+      const previouslySelectedCell = document.querySelector(".selected");
+      if (previouslySelectedCell) {
+        previouslySelectedCell.classList.remove("occupied");
       }
-      heldPiece.removeAttribute("id", "held");
-      heldPiece = null;
+      // appends piece div to cell div, removes selected class on previous cell and adds occupied class to target cell
+      targetCell.appendChild(heldPiece);
+      previouslySelectedCell.classList.remove("selected");
+      targetCell.classList.add("occupied");
     }
-  });
+
+    heldPiece.removeAttribute("id", "held");
+    heldPiece = null;
+  }
+});
 
 // Attaches piece to cursor on mousemove
 document.addEventListener("mousemove", function (e) {
   if (heldPiece) {
-    heldPiece.style.position = 'fixed';
+    heldPiece.style.position = "fixed";
     heldPiece.style.left = e.clientX - heldPiece.offsetWidth / 2 + "px";
     heldPiece.style.top = e.clientY - heldPiece.offsetHeight / 2 + "px";
   }
