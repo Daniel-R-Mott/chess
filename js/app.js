@@ -45,9 +45,7 @@ var pieces = {
 // -update 'pieces' obj with new locations? may be useful
 
 makeBoard();
-checkCells();
 
-var heldPiece = null;
 document.addEventListener("mousemove", stickyMouse);
 
 const cells = document.querySelectorAll(".cell");
@@ -56,14 +54,18 @@ cells.forEach((cell) => {
   cell.addEventListener("mouseup", placePiece);
 });
 
+var heldPiece = null;
+
 //////////////FUNCTION JUNCTION
 
 function select() {
+  if (document.querySelector(".selected")) {
+    document.querySelector(".selected").classList.remove("selected");
+  }
   this.classList.add("selected");
   if (this.classList.contains("occupied")) {
     heldPiece = this.querySelector(".piece");
     heldPiece.setAttribute("id", "held");
-    this.classList.remove("occupied");
   } else {
     heldPiece = null;
   }
@@ -96,17 +98,15 @@ function stickyMouse(e) {
   }
 }
 
-//Checks all cells for child div, sets class
-function checkCells() {
-  const cells = document.querySelectorAll(".cell");
-  cells.forEach((cell) => {
-    if (cell.firstChild) {
-      cell.classList.add("occupied");
-    }
-  });
+//Board generator
+function makeBoard() {
+  createGrid();
+  populatePieces();
+  checkCells();
 }
 
-function makeBoard() {
+function createGrid() {
+  const chessboard = document.getElementById("chessboard");
   for (var i = 0; i < 8; i++) {
     for (var j = 0; j < 8; j++) {
       var cell = document.createElement("div");
@@ -118,19 +118,72 @@ function makeBoard() {
       }
       var chessboardLocation = file[j] + (8 - i);
       cell.id = chessboardLocation;
-      if (pieces[chessboardLocation]) {
-        var pieceDiv = document.createElement("div");
-        pieceDiv.className = "piece";
-        pieceDiv.textContent = pieces[chessboardLocation];
-        if (/[78]$/.test(chessboardLocation)) {
-          pieceDiv.classList.add("blackPiece");
-        } else {
-          pieceDiv.classList.add("whitePiece");
-        }
-        cell.appendChild(pieceDiv);
-      }
       chessboard.appendChild(cell);
     }
   }
 }
 
+function populatePieces() {
+  const cells = document.querySelectorAll(".cell");
+  cells.forEach((cell) => {
+    if (pieces[cell.id]) {
+      var pieceDiv = document.createElement("div");
+      pieceDiv.className = "piece";
+      pieceDiv.classList.add(pieces[cell.id]);
+      pieceDiv.textContent = pieces[cell.id];
+      if (/[78]$/.test(cell.id)) {
+        pieceDiv.classList.add("blackPiece");
+      } else {
+        pieceDiv.classList.add("whitePiece");
+      }
+      cell.appendChild(pieceDiv);
+    }
+  });
+}
+
+function checkCells() {
+  const cells = document.querySelectorAll(".cell");
+  cells.forEach((cell) => {
+    if (cell.firstChild) {
+      cell.classList.add("occupied");
+    } else {
+      cell.classList.remove("occupied");
+    }
+  });
+}
+
+
+
+// }
+// A1: "♖",
+// B1: "♘",
+// C1: "♗",
+// D1: "♕",
+// E1: "♔",
+// F1: "♗",
+// G1: "♘",
+// H1: "♖",
+// A2: "♙",
+// B2: "♙",
+// C2: "♙",
+// D2: "♙",
+// E2: "♙",
+// F2: "♙",
+// G2: "♙",
+// H2: "♙",
+// A7: "♟",
+// B7: "♟",
+// C7: "♟",
+// D7: "♟",
+// E7: "♟",
+// F7: "♟",
+// G7: "♟",
+// H7: "♟",
+// A8: "♜",
+// B8: "♞",
+// C8: "♝",
+// D8: "♛",
+// E8: "♚",
+// F8: "♝",
+// G8: "♞",
+// H8: "♜",
