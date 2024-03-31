@@ -55,7 +55,7 @@ text-align: center;
 }
 
 
-div {
+.piece {
   cursor: pointer;
   text-shadow: 1px 1px 3px black;
 }
@@ -65,4 +65,9 @@ div {
 #held {
   pointer-events:none;
   cursor:none;
+}
+
+.valid-move {
+background: darkred;
+
 }
