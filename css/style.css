@@ -35,7 +35,7 @@ html {
   width: 100px;
   border: 2px solid rgb(168, 204, 224);
   border-style: inset;
-text-align: center;
+  text-align: center;
 }
 
 .white {
@@ -54,20 +54,17 @@ text-align: center;
   text-shadow: 2px 2px 3px darkred;
 }
 
-
 .piece {
   cursor: pointer;
   text-shadow: 1px 1px 3px black;
 }
 
-
 /* Make piece stick to mouse */
 #held {
-  pointer-events:none;
-  cursor:none;
+  pointer-events: none;
+  cursor: none;
 }
 
 .valid-move {
-background: darkred;
-
+  background: darkred;
 }
